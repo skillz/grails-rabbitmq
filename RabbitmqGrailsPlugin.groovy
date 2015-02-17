@@ -196,7 +196,7 @@ class RabbitmqGrailsPlugin {
                 
                 if(!backOffPolicy) {
                     backOffPolicy = new FixedBackOffPolicy()
-                    backOffPolicy.backOffPeriod = 5000
+                    backOffPolicy.backOffPeriod = 50000
                 }
                 
                 def retryTemplate = new RetryTemplate()
