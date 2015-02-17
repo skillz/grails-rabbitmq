@@ -54,7 +54,7 @@ class RabbitmqGrailsPlugin {
     // URL to the plugin's documentation
     def documentation = "http://grails-plugins.github.com/grails-rabbitmq/"
     
-    def loadAfter = ['services']
+    def loadAfter = ['services', 'converters', 'mail']
     def observe = ['*']
 
     def doWithSpring = { 
