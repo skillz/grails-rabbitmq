@@ -230,20 +230,7 @@ class RabbitmqGrailsPlugin {
                 initialiseAdviceChain bean, applicationContext
 
                 // Now that the listener is properly configured, we can start it.
-                def startDelay = application.config.rabbitmq.startDelay ?: 0
-                // two code paths to reduce risk of this breaking
-                // (we can test it in one environment and leave it off in others)
-                if (startDelay > 0) {
-                    // info level logging for testing, switch to debug when we are confident in this
-                    log.info("Delaying rabbitmq listener start for ${startDelay}ms")
-                    new Timer().runAfter(startDelay, {
-                        log.info("Starting delayed rabbitmq listener")
-                        bean.start()
-                    })
-                } else {
-                    log.info("Starting rabbitmq listener")
-                    bean.start()
-                }
+                bean.start()
             }
         }
     }
