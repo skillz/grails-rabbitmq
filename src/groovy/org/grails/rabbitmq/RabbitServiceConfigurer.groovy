@@ -150,8 +150,7 @@ class RabbitServiceConfigurer {
                     "${serviceGrailsClass.shortName} must declare a non-empty string for its " +
                     "'rabbitSubscribe' property.")
         }
-
-        initOptionsForSubscribe([name: exchange])
+		initOptionsForSubscribe([name: exchange])
     }
 
     protected initOptionsForSubscribe(Map subscribeOptions) {
@@ -162,6 +161,17 @@ class RabbitServiceConfigurer {
         }
 
         options << subscribeOptions
+		
+		rabbitConfig.services.each {
+			serviceKey, serviceOption -> 
+			serviceOption.each{
+				key, value -> 
+				if(key == SUBSCRIBE) {
+					options << value
+				}
+			}
+		}
+		
         options.exchangeBeanName = "grails.rabbit.exchange.${options.remove("name")}"
     }
 
