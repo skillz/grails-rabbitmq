@@ -11,6 +11,6 @@ class RabbitErrorHandler implements ErrorHandler {
     private static final Logger log = LoggerFactory.getLogger(this)
 
     void handleError(Throwable t) {
-        log.error "Rabbit service listener failed.", t
+        log.info "Rabbit service listener failed.", t
     }
 }
