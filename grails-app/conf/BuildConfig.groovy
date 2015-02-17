@@ -2,6 +2,8 @@ grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir	= "target/test-reports"
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
+
+grails.project.dependency.resolver = 'maven'
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits( "global" ) {
@@ -9,14 +11,13 @@ grails.project.dependency.resolution = {
         // excludes 'ehcache'
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
-    repositories {        
-        grailsPlugins()
-        grailsHome()
-        grailsCentral()
-        mavenCentral()
+    repositories {
+        mavenRepo name: 'Skillz Nexus Grails Repository', url: 'http://nexus.skillz.com/content/groups/grails'
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
+        build 'org.springframework:spring-context:3.2.9.RELEASE'
+
         runtime ('org.springframework.amqp:spring-rabbit:1.1.3.RELEASE') {
             excludes 'junit',
                      'spring-aop',
@@ -32,7 +33,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        build ":release:2.0.4", {
+        build (":release:2.0.4") {
             export = false
         }
     }
