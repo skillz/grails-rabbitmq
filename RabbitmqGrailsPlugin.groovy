@@ -16,6 +16,7 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer
 import org.springframework.amqp.rabbit.retry.MissingMessageIdAdvice
 import org.springframework.amqp.support.converter.SimpleMessageConverter
 import org.springframework.retry.backoff.FixedBackOffPolicy
+import org.springframework.retry.backoff.ExponentialBackOffPolicy
 import org.springframework.retry.policy.MapRetryContextCache
 import org.springframework.retry.policy.SimpleRetryPolicy
 import org.springframework.retry.support.RetryTemplate
@@ -172,7 +173,7 @@ class RabbitmqGrailsPlugin {
                     "grails.rabbit.binding.${binding.exchange}.${binding.queue}"(Binding, binding.queue, QUEUE, binding.exchange, binding.rule, binding.arguments )
                 }
             }
-			
+            
             rabbitRetryHandler(StatefulRetryOperationsInterceptorFactoryBean) {
                 def retryPolicy = new SimpleRetryPolicy()
                 def maxRetryAttempts = 1
@@ -186,8 +187,17 @@ class RabbitmqGrailsPlugin {
                 }
                 retryPolicy.maxAttempts = maxRetryAttempts
                 
-                def backOffPolicy = new FixedBackOffPolicy()
-                backOffPolicy.backOffPeriod = 5000
+                def backOffPolicy
+                if(rabbitmqConfig?.retryPolicy?.containsKey('backoffPolicy')) {
+                    def backoffClass = rabbitmqConfig.retryPolicy.backoffPolicy
+                    if(backoffClass == 'exponential')
+                        backoffPolicy = new ExponentialBackOffPolicy()
+                }
+                
+                if(!backOffPolicy) {
+                    backOffPolicy = new FixedBackOffPolicy()
+                    backOffPolicy.backOffPeriod = 5000
+                }
                 
                 def retryTemplate = new RetryTemplate()
                 retryTemplate.retryPolicy  = retryPolicy
