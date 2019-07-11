@@ -41,7 +41,7 @@ class RabbitServiceConfigurer {
 
     private static final String QUEUE = "rabbitQueue"
     private static final String SUBSCRIBE = "rabbitSubscribe"
-    private static final int PREFETCH_COUNT = 5
+    private static final int TOURNAMENT_CONCLUDE_SERVICE_PREFETCH_COUNT = 5
     private static final Set ADAPTER_OPTIONS = [
             MESSAGE_CONVERTER_OPTION,
             "defaultListenerMethod",
@@ -219,7 +219,7 @@ class RabbitServiceConfigurer {
             messageListener = ref("${propertyName}RabbitAdapter")
 
             if (type != SUBSCRIBE && serviceGrailsClass.clazz.name == 'skillz.TournamentConcludeService') {
-                prefetchCount = PREFETCH_COUNT
+                prefetchCount = TOURNAMENT_CONCLUDE_SERVICE_PREFETCH_COUNT
             }
             for (entry in containerOptions) {
                 delegate."${entry.key}" = entry.value
